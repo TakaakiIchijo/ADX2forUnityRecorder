@@ -4,9 +4,9 @@ ADX2 for Unityで再生中の音を録音するエディタ拡張
 ![ADX2UnityRecoder](ADX2UnityRecoder.png)
 
 ## 動作確認環境
-Unity 2019.3.1f + ADX2 LE SDK 2.10.05
+Unity 2019.3.1f1 + ADX2 LE SDK 2.10.05
 
-ADX2でも多分動く
+Unity 2018.4.13f1 + ADX2 (CRIWARE SDK for Unity 3.00.04)
 
 ## 使用方法
 ゲームを再生開始し、任意のタイミングで「Start Recording」ボタンを押してください。
