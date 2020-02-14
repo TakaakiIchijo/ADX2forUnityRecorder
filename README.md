@@ -20,4 +20,4 @@ Unity 2018.4.13f1 + ADX2 (CRIWARE SDK for Unity 3.00.04)
 
 ## 今後のアップデート
 - Unity Recorderが拡張可能になったら対応
-~ 出力されたwavをどうにかしてmp4とくっつける方法
+- 出力されたwavをどうにかしてmp4とくっつける方法を探す
