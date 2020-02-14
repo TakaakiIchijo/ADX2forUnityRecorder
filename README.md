@@ -17,3 +17,7 @@ Unity 2018.4.13f1 + ADX2 (CRIWARE SDK for Unity 3.00.04)
 3. Unity Recorderも一緒に起動するのでゲームを再生開始する
 4. 任意のタイミングでUnity Recorder側の録画開始ボタンを押す
 5. 任意のタイミングでUnity Recorder側の録画停止ボタンを押す
+
+## 今後のアップデート
+= Unity Recorderが拡張可能になったら対応
+~ 出力されたwavをどうにかしてmp4とくっつける方法
