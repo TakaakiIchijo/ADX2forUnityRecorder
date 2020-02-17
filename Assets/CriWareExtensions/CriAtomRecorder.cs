@@ -6,12 +6,11 @@ using UnityEngine;
 public class CriAtomRecorder: MonoBehaviour
 {
     private WaveFileCreator waveFileCreator;
-
     private CriAtomExOutputAnalyzer analyzer;
 
     private bool IsRecording = false;
     private int numSamples = 512;
-
+    
     private IEnumerator recordingCoroutine;
 
     private void Start()
@@ -19,29 +18,33 @@ public class CriAtomRecorder: MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public void StartRecording(string filePath, int samplingRate = 48000)
+    public void StartRecording(string filePath, int outPutSamplingRate = 0)
     {
+        if (outPutSamplingRate == 0)
+        {
+            outPutSamplingRate = 48000;
+        }
+
         waveFileCreator = new WaveFileCreator(
             filePath,
             numChannels:2,
-            samplingRate,
+            outPutSamplingRate,
             numbites:16
             );
         IsRecording = false;
 
-        recordingCoroutine = Record();
+        recordingCoroutine = RecordCoroutine();
         
         StartCoroutine(recordingCoroutine);
     }
 
     public string GetCreatedFileFullPath()
     {
-       return waveFileCreator.FileFullPath;
+       return waveFileCreator?.FileFullPath;
     }
 
-    IEnumerator Record()
+    IEnumerator RecordCoroutine()
     {
-        // Wait for Loading ACB...
         while (CriAtom.CueSheetsAreLoading) {
             yield return null;
         }
@@ -64,29 +67,25 @@ public class CriAtomRecorder: MonoBehaviour
 
     public void StopRecording()
     {
-        if (recordingCoroutine != null)
-        {
-            StopAndWrite();
-            
-            IsRecording = false;
-            
-            StopCoroutine(recordingCoroutine);
-            recordingCoroutine = null;
-        }
+        if (IsRecording == false) return;
+        
+        StopAndWrite();
+        IsRecording = false;
+        StopCoroutine(recordingCoroutine);
+        recordingCoroutine = null;
     }
 
-    public void PcmCapture(float[] dataL, float[] dataR, int numChannels, int numData)
+    private void PcmCapture(float[] dataL, float[] dataR, int numChannels, int numData)
     {
         if (!IsRecording || waveFileCreator == null)
             return;
         
         waveFileCreator.CapturePcm(dataL, dataR, numData);
-        //Debug.Log(numData);
     }
 
     private void StopAndWrite()
     {
-        if (waveFileCreator == null) return;
+        if (waveFileCreator == null　|| IsRecording == false) return;
         
         waveFileCreator.StopAndWrite();
         

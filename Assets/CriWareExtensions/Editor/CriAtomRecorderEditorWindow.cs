@@ -137,8 +137,6 @@ public class CriAtomRecorderEditorWindow : EditorWindow
 
         var initializer = FindObjectOfType<CriWareInitializer>();
         int samplingRate = initializer.atomConfig.outputSamplingRate;
-        samplingRate = samplingRate == 0 ? 48000 : samplingRate; //設定してなかったらPCのデフォルトを設定
-
         recorder.StartRecording(GetDataPathDirectoryOrCreate(savePath) + "/" + tempFileName, samplingRate);
 
         var fullPath = recorder.GetCreatedFileFullPath();
