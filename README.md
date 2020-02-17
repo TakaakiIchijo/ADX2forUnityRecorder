@@ -9,6 +9,7 @@ Unity 2019.3.1f1 + ADX2 LE SDK 2.10.05
 Unity 2018.4.13f1 + ADX2 (CRIWARE SDK for Unity 3.00.04)
 
 ## エディタでの使用方法
+Window/CRIWARE/CriAtomRecorderからツールウィンドウを呼び出すことができます。
 ゲームを再生開始し、任意のタイミングで「Start Recording」ボタンを押してください。
 
 ### Unity Recorderとの連携方法
