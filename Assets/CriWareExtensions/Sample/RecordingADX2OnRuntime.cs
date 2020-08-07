@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class RecordingADX2OnRuntime : MonoBehaviour
 {
-    public CriAtomRecorder atomRecoder;
+    public CriAtomRecorderInstance atomRecoder;
     public string fileName = "recordedaudio";
 
     private const string BackUpDirectory = "SavedGameData";
@@ -30,7 +30,8 @@ public class RecordingADX2OnRuntime : MonoBehaviour
     {
         var path = deviceSavedGameDataPath +"/"+fileName + "_" + DateTime.Now.ToString("yyyyMMdd_hh_mm_ss");
         
-        atomRecoder.StartRecording(path);
+        atomRecoder.SetParameters(path);
+        atomRecoder.StartRecordingCoroutine();
     }
 
     public void OnRecordStop()

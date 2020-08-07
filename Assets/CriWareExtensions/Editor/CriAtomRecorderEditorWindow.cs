@@ -15,33 +15,10 @@ public class CriAtomRecorderEditorWindow : EditorWindow
     private string savedFileName;
     private string savedDirectoryPath;
     
-    private CriAtomRecorder recorder;
+    private CriAtomRecorderInstance recorderInstance;
 
     private bool isRecording = false;
     private string recordButtonName = "Start recording";
-
-    private void OnEnable()
-    {
-        //Unity Recorderと連動させるときに有効にしてください
-        /*
-        UnityEditor.Recorder.RecorderWindow recorderWindow = GetWindow<UnityEditor.Recorder.RecorderWindow>();
-        
-        EditorApplication.update += () =>
-        {
-            if (recorderWindow.IsRecording() && isRecording == false)
-            {
-                StartRecording();
-                this.Repaint();
-            }
-
-            if (recorderWindow.IsRecording() == false && isRecording)
-            {
-                StopRecording();
-                this.Repaint();
-            }
-        };
-        */
-    }
 
     [MenuItem("Window/CRIWARE/CriAtomRecorder")]
     private static void Create()
@@ -124,8 +101,8 @@ public class CriAtomRecorderEditorWindow : EditorWindow
     {
         isRecording = true;
         
-        GameObject recorderObj = new GameObject("CriAtomRecorder");
-        recorder = recorderObj.AddComponent<CriAtomRecorder>();
+        GameObject recorderObj = new GameObject("CriAtomRecorderInstance");
+        recorderInstance = recorderObj.AddComponent<CriAtomRecorderInstance>();
         recorderObj.hideFlags = HideFlags.HideInHierarchy;
         
         var tempFileName = fileName;
@@ -137,9 +114,10 @@ public class CriAtomRecorderEditorWindow : EditorWindow
 
         var initializer = FindObjectOfType<CriWareInitializer>();
         int samplingRate = initializer.atomConfig.outputSamplingRate;
-        recorder.StartRecording(GetDataPathDirectoryOrCreate(savePath) + "/" + tempFileName, samplingRate);
+        recorderInstance.SetParameters(GetDataPathDirectoryOrCreate(savePath) + "/" + tempFileName, samplingRate);
+        recorderInstance.StartRecordingCoroutine();
 
-        var fullPath = recorder.GetCreatedFileFullPath();
+        var fullPath = recorderInstance.GetCreatedFileFullPath();
         savedFileName = Path.GetFileName(fullPath);
         savedDirectoryPath = fullPath.Replace(savedFileName, "");
     }
@@ -148,7 +126,7 @@ public class CriAtomRecorderEditorWindow : EditorWindow
     {
         isRecording = false;
 
-        Destroy(recorder.gameObject);
+        Destroy(recorderInstance.gameObject);
     }
 
     public static string GetDataPathDirectoryOrCreate(string directoryName)

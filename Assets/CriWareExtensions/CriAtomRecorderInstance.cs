@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using UnityEngine;
 
-public class CriAtomRecorder: MonoBehaviour
+public class CriAtomRecorderInstance: MonoBehaviour
 {
     private WaveFileCreator waveFileCreator;
     private CriAtomExOutputAnalyzer analyzer;
@@ -18,7 +18,7 @@ public class CriAtomRecorder: MonoBehaviour
         DontDestroyOnLoad(this.gameObject);
     }
 
-    public void StartRecording(string filePath, int outPutSamplingRate = 0)
+    public void SetParameters(string filePath, int outPutSamplingRate = 0)
     {
         if (outPutSamplingRate == 0)
         {
@@ -30,9 +30,12 @@ public class CriAtomRecorder: MonoBehaviour
             numChannels:2,
             outPutSamplingRate,
             numbites:16
-            );
+        );
         IsRecording = false;
-
+    }
+    
+    public void StartRecordingCoroutine()
+    {
         recordingCoroutine = RecordCoroutine();
         
         StartCoroutine(recordingCoroutine);
