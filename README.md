@@ -10,9 +10,13 @@ ADX2 for Unityで再生中の音を録音するエディタ拡張
 ![UnityRecorderInterfece](Images/UnityRecorderInterface.png)
 
 ## 動作確認環境
-- Unity 2020.1.0f1
-- Unity Recorder 2.2.0-preview
-- ADX2 LE SDK 2.10.06
+- Unity 2022.3.20f1
+- Unity Recorder 4.0.2
+- ADX LE Unity SDK(3.10.00)
+
+## R3, UniTask環境で動作させる場合
+- R3 1.1.11
+- UniTask 2.5.3
 
 ## エディタでの使用方法
 Window/CRIWARE/CriAtomRecorderからツールウィンドウを呼び出すことができます。
