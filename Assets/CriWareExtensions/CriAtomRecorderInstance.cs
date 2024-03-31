@@ -1,6 +1,5 @@
-﻿using System;
+﻿using CriWare;
 using System.Collections;
-using System.IO;
 using UnityEngine;
 
 public class CriAtomRecorderInstance: MonoBehaviour
