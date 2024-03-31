@@ -75,7 +75,7 @@ public class WaveFileCreator
         writeBinaryWriter.Write((ushort)numbites); //bitswidth  1 サンプルあたりの使用するビット数//
 
         writeBinaryWriter.Write(Encoding.ASCII.GetBytes("data")); 　//こっからデータよ//
-        writeBinaryWriter.Write((uint)(length - 36));//チャンクサイズ//
+        writeBinaryWriter.Write((uint)(length - 44));//チャンクサイズ//
         writeBinaryWriter.Seek((int)length, SeekOrigin.Begin);
 
         //binaryWriter.Close();
