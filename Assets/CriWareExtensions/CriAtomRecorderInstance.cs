@@ -1,16 +1,20 @@
-﻿using CriWare;
+using System;
 using System.Collections;
+using CriWare;
 using UnityEngine;
+
+#region R3+UniTask version
+//using Cysharp.Threading.Tasks;
+//using R3;
+#endregion
 
 public class CriAtomRecorderInstance: MonoBehaviour
 {
     private WaveFileCreator waveFileCreator;
     private CriAtomExOutputAnalyzer analyzer;
 
-    private bool IsRecording = false;
+    public bool IsRecording {get; private set;} = false;    
     private int numSamples = 512;
-    
-    private IEnumerator recordingCoroutine;
 
     private void Start()
     {
@@ -32,26 +36,67 @@ public class CriAtomRecorderInstance: MonoBehaviour
         );
         IsRecording = false;
     }
-    
-    public void StartRecordingCoroutine()
-    {
-        recordingCoroutine = RecordCoroutine();
-        
-        StartCoroutine(recordingCoroutine);
-    }
 
     public string GetCreatedFileFullPath()
     {
        return waveFileCreator?.FileFullPath;
     }
 
+#region R3+UniTask version
+    /* 
+    IDisposable recordingUpdate;
+    
+    public async UniTask StartRecording()
+    {
+        await UniTask.WaitUntil(() => CriAtom.CueSheetsAreLoading == false);
+
+        CriAtomExOutputAnalyzer.Config config = new CriAtomExOutputAnalyzer.Config
+        {
+            enablePcmCapture = true, 
+            enablePcmCaptureCallback = true, 
+            numCapturedPcmSamples = numSamples
+        };
+        
+        analyzer = new CriAtomExOutputAnalyzer(config);
+        analyzer.SetPcmCaptureCallback(PcmCapture);
+        
+        analyzer.AttachDspBus("MasterOut");
+
+        IsRecording = true;
+
+        recordingUpdate = Observable.EveryUpdate().Subscribe(_ =>
+        {
+            analyzer.ExecutePcmCaptureCallback();
+        });
+    }
+    
+    public void StopRecording()
+    {
+        if (IsRecording == false) return;
+        
+        StopAndWrite();
+        IsRecording = false;
+
+        recordingUpdate?.Dispose();
+    }
+    */
+#endregion
+    
+#region Coroutine version
+    private IEnumerator recordingCoroutine;
+
+    public void StartRecordingCoroutine()
+    {
+        recordingCoroutine = RecordCoroutine();
+        StartCoroutine(recordingCoroutine);
+    }
+    
     IEnumerator RecordCoroutine()
     {
         while (CriAtom.CueSheetsAreLoading) {
             yield return null;
         }
 
-        /* Initialize CriAtomExOutputAnalyzer for PCM capture. */
         CriAtomExOutputAnalyzer.Config config = new CriAtomExOutputAnalyzer.Config
         {
             enablePcmCapture = true, 
@@ -66,7 +111,14 @@ public class CriAtomRecorderInstance: MonoBehaviour
 
         IsRecording = true;
     }
-
+    private void Update()
+    {
+        if (IsRecording)
+        {
+            analyzer.ExecutePcmCaptureCallback();
+        }
+    }
+    
     public void StopRecording()
     {
         if (IsRecording == false) return;
@@ -76,7 +128,8 @@ public class CriAtomRecorderInstance: MonoBehaviour
         StopCoroutine(recordingCoroutine);
         recordingCoroutine = null;
     }
-
+#endregion
+    
     private void PcmCapture(float[] dataL, float[] dataR, int numChannels, int numData)
     {
         if (!IsRecording || waveFileCreator == null)
@@ -94,14 +147,6 @@ public class CriAtomRecorderInstance: MonoBehaviour
         if (analyzer != null) {
             analyzer.DetachDspBus();
             analyzer.Dispose();
-        }
-    }
-
-    private void Update()
-    {
-        if (IsRecording)
-        {
-            analyzer.ExecutePcmCaptureCallback();
         }
     }
 
