@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Unity.Collections;
-using UnityEditor.Media;
-using UnityEditor.Recorder.Input;
+using System;
 using UnityEngine;
+using CriWare;
 
 namespace UnityEditor.Recorder
 {
